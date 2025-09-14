@@ -8,35 +8,64 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Background & Surface */
+    --background: 220 14% 96%;
+    --foreground: 220 13% 9%;
+    --surface: 0 0% 100%;
+    --surface-soft: 220 14% 98%;
 
+    /* Cards & Components */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 13% 9%;
+    --card-soft: 220 14% 98%;
 
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 13% 9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary Tech Blue */
+    --primary: 222 84% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 222 84% 65%;
+    --primary-muted: 222 44% 90%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary Accent */
+    --secondary: 268 83% 58%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-soft: 268 83% 68%;
+    --secondary-muted: 268 43% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Neutral Tones */
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 13% 45%;
+    --accent: 220 14% 92%;
+    --accent-foreground: 220 13% 9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Status Colors */
+    --success: 142 76% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 48 96% 53%;
+    --warning-foreground: 220 13% 9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Borders & Inputs */
+    --border: 220 14% 88%;
+    --input: 220 14% 92%;
+    --ring: 222 84% 55%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(222 84% 55%), hsl(268 83% 58%));
+    --gradient-soft: linear-gradient(135deg, hsl(222 44% 95%), hsl(268 43% 95%));
+    --gradient-surface: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 14% 98%));
 
-    --radius: 0.5rem;
+    /* Shadows */
+    --shadow-soft: 0 2px 8px -2px hsl(220 13% 9% / 0.1);
+    --shadow-medium: 0 8px 24px -4px hsl(220 13% 9% / 0.15);
+    --shadow-strong: 0 16px 40px -8px hsl(220 13% 9% / 0.25);
+
+    /* Radius */
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
