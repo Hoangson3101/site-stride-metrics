@@ -97,14 +97,6 @@ export function BenchmarkComparison({ data = mockBenchmarkData, isLoading = fals
     return '🔴';
   };
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'P1': return 'bg-destructive text-destructive-foreground';
-      case 'P2': return 'bg-warning text-warning-foreground';
-      case 'P3': return 'bg-success text-success-foreground';
-      default: return 'bg-muted text-muted-foreground';
-    }
-  };
 
   const formatValue = (value: number | string, unit?: string) => {
     if (typeof value === 'string') return value;
@@ -150,7 +142,6 @@ export function BenchmarkComparison({ data = mockBenchmarkData, isLoading = fals
                 <TableHead className="text-center">Bạn</TableHead>
                 <TableHead className="text-center">Median Top 10</TableHead>
                 <TableHead className="text-center">Gap</TableHead>
-                <TableHead className="text-center">Ưu tiên</TableHead>
                 <TableHead>Gợi ý hành động</TableHead>
               </TableRow>
             </TableHeader>
@@ -183,11 +174,6 @@ export function BenchmarkComparison({ data = mockBenchmarkData, isLoading = fals
                     </div>
                   </TableCell>
                   
-                  <TableCell className="text-center">
-                    <Badge className={`${getPriorityColor(item.priority)} font-semibold`}>
-                      {item.priority}
-                    </Badge>
-                  </TableCell>
                   
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -202,28 +188,7 @@ export function BenchmarkComparison({ data = mockBenchmarkData, isLoading = fals
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-          <div className="text-center space-y-1">
-            <div className="text-2xl font-bold text-destructive">
-              {data.filter(d => d.priority === 'P1').length}
-            </div>
-            <div className="text-xs text-muted-foreground">Ưu tiên P1 (Khẩn cấp)</div>
-          </div>
-          
-          <div className="text-center space-y-1">
-            <div className="text-2xl font-bold text-warning">
-              {data.filter(d => d.priority === 'P2').length}
-            </div>
-            <div className="text-xs text-muted-foreground">Ưu tiên P2 (Quan trọng)</div>
-          </div>
-          
-          <div className="text-center space-y-1">
-            <div className="text-2xl font-bold text-success">
-              {data.filter(d => d.priority === 'P3').length}
-            </div>
-            <div className="text-xs text-muted-foreground">Ưu tiên P3 (Duy trì)</div>
-          </div>
-        </div>
+        
       </div>
     </Card>
   );

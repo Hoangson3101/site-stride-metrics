@@ -256,11 +256,7 @@ export function CompetitorTable({
                     </div>
                   </TableCell>
                   
-                  <TableCell>
-                    <Button variant="ghost" size="sm">
-                      <ExternalLink className="h-3 w-3" />
-                    </Button>
-                  </TableCell>
+                  
                 </TableRow>
               ))}
             </TableBody>
@@ -268,13 +264,7 @@ export function CompetitorTable({
         </div>
 
         {/* Info Footer */}
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <Info className="h-4 w-4" />
-            <span>Click vào domain để xem "Top Ref Domains" của đối thủ</span>
-          </div>
-          <span>{filteredData.length} kết quả</span>
-        </div>
+        
       </div>
     </Card>
   );

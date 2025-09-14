@@ -6,6 +6,7 @@ import { Check, Loader2, AlertTriangle, FileText } from "lucide-react";
 interface AnalysisStep {
   id: string;
   name: string;
+  vietnameseName?: string;
   status: 'pending' | 'running' | 'completed' | 'error' | 'warning';
   progress?: number;
   message?: string;
@@ -19,13 +20,13 @@ interface AnalysisProgressProps {
 }
 
 const defaultSteps: AnalysisStep[] = [
-  { id: 'serp', name: 'SERP Fetcher (Top 10)', status: 'pending' },
-  { id: 'target', name: 'Target Backlink Collector', status: 'pending' },
-  { id: 'competitor', name: 'Competitor Backlink Collector', status: 'pending' },
-  { id: 'normalizer', name: 'Normalizer & Merger', status: 'pending' },
-  { id: 'index', name: 'Index Checker (mẫu)', status: 'pending' },
-  { id: 'metrics', name: 'Metrics Calculator', status: 'pending' },
-  { id: 'analyzer', name: 'Gap Analyzer & Report', status: 'pending' },
+  { id: 'serp', name: 'SERP Fetcher (Top 10)', vietnameseName: 'Thu thập kết quả tìm kiếm', status: 'pending' },
+  { id: 'target', name: 'Target Backlink Collector', vietnameseName: 'Thu thập backlink mục tiêu', status: 'pending' },
+  { id: 'competitor', name: 'Competitor Backlink Collector', vietnameseName: 'Thu thập backlink đối thủ', status: 'pending' },
+  { id: 'normalizer', name: 'Normalizer & Merger', vietnameseName: 'Chuẩn hóa và gộp dữ liệu', status: 'pending' },
+  { id: 'index', name: 'Index Checker (mẫu)', vietnameseName: 'Kiểm tra chỉ mục', status: 'pending' },
+  { id: 'metrics', name: 'Metrics Calculator', vietnameseName: 'Tính toán chỉ số', status: 'pending' },
+  { id: 'analyzer', name: 'Gap Analyzer & Report', vietnameseName: 'Phân tích khoảng cách', status: 'pending' },
 ];
 
 export function AnalysisProgress({ 
@@ -102,7 +103,12 @@ export function AnalysisProgress({
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-sm">{step.name}</span>
+                  <div className="flex flex-col">
+                    <span className="font-medium text-sm">{step.name}</span>
+                    {step.vietnameseName && (
+                      <span className="text-xs text-muted-foreground mt-0.5">→ {step.vietnameseName}</span>
+                    )}
+                  </div>
                   <div className="flex items-center gap-2">
                     {step.status === 'running' && step.progress && (
                       <span className="text-xs font-medium">{step.progress}%</span>
@@ -138,13 +144,7 @@ export function AnalysisProgress({
           ))}
         </div>
 
-        {/* Log Summary */}
-        <div className="flex items-center gap-2 pt-2 border-t">
-          <FileText className="h-4 w-4 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground">
-            Log rút gọn - Xem chi tiết quota/nguồn trong cấu hình
-          </span>
-        </div>
+        
       </div>
     </Card>
   );

@@ -23,13 +23,13 @@ const Index = () => {
   };
 
   const mockAnalysisSteps = [
-    { id: 'serp', name: 'SERP Fetcher (Top 10)', status: 'completed' as const },
-    { id: 'target', name: 'Target Backlink Collector', status: 'completed' as const },
-    { id: 'competitor', name: 'Competitor Backlink Collector', status: 'running' as const, progress: 65 },
-    { id: 'normalizer', name: 'Normalizer & Merger', status: 'pending' as const },
-    { id: 'index', name: 'Index Checker (mẫu)', status: 'pending' as const },
-    { id: 'metrics', name: 'Metrics Calculator', status: 'pending' as const },
-    { id: 'analyzer', name: 'Gap Analyzer & Report', status: 'pending' as const },
+    { id: 'serp', name: 'SERP Fetcher (Top 10)', vietnameseName: 'Thu thập kết quả tìm kiếm', status: 'completed' as const },
+    { id: 'target', name: 'Target Backlink Collector', vietnameseName: 'Thu thập backlink mục tiêu', status: 'completed' as const },
+    { id: 'competitor', name: 'Competitor Backlink Collector', vietnameseName: 'Thu thập backlink đối thủ', status: 'running' as const, progress: 65 },
+    { id: 'normalizer', name: 'Normalizer & Merger', vietnameseName: 'Chuẩn hóa và gộp dữ liệu', status: 'pending' as const },
+    { id: 'index', name: 'Index Checker (mẫu)', vietnameseName: 'Kiểm tra chỉ mục', status: 'pending' as const },
+    { id: 'metrics', name: 'Metrics Calculator', vietnameseName: 'Tính toán chỉ số', status: 'pending' as const },
+    { id: 'analyzer', name: 'Gap Analyzer & Report', vietnameseName: 'Phân tích khoảng cách', status: 'pending' as const },
   ];
 
   return (
