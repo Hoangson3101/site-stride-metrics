@@ -15,6 +15,7 @@ interface AnalysisFormData {
   url: string;
   keyword: string;
   location: string;
+  device: string;
   topN: number;
   blLimit: number;
 }
@@ -24,6 +25,7 @@ export function HeroInput({ onAnalyze, isLoading = false }: HeroInputProps) {
     url: '',
     keyword: '',
     location: 'VN/vi',
+    device: 'Desktop',
     topN: 10,
     blLimit: 5000,
   });
@@ -126,7 +128,7 @@ export function HeroInput({ onAnalyze, isLoading = false }: HeroInputProps) {
           </div>
 
           {/* Optional Settings */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label className="text-sm font-medium">Vùng/Ngôn ngữ</Label>
               <Select value={formData.location} onValueChange={(value) => handleInputChange('location', value)}>
@@ -137,6 +139,19 @@ export function HeroInput({ onAnalyze, isLoading = false }: HeroInputProps) {
                   <SelectItem value="VN/vi">VN/vi</SelectItem>
                   <SelectItem value="US/en">US/en</SelectItem>
                   <SelectItem value="UK/en">UK/en</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Thiết bị</Label>
+              <Select value={formData.device} onValueChange={(value) => handleInputChange('device', value)}>
+                <SelectTrigger className="h-10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Desktop">Desktop</SelectItem>
+                  <SelectItem value="Mobile">Mobile</SelectItem>
                 </SelectContent>
               </Select>
             </div>
