@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Zap, AlertCircle } from "lucide-react";
+import { Search, Link as LinkIcon, AlertCircle } from "lucide-react";
 
 interface HeroInputProps {
   onAnalyze?: (data: AnalysisFormData) => void;
@@ -14,18 +13,12 @@ interface HeroInputProps {
 interface AnalysisFormData {
   url: string;
   keyword: string;
-  location: string;
-  topN: number;
-  blLimit: number;
 }
 
 export function HeroInput({ onAnalyze, isLoading = false }: HeroInputProps) {
   const [formData, setFormData] = useState<AnalysisFormData>({
     url: '',
     keyword: '',
-    location: 'VN/vi',
-    topN: 10,
-    blLimit: 5000,
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -63,7 +56,7 @@ export function HeroInput({ onAnalyze, isLoading = false }: HeroInputProps) {
     }
   };
 
-  const handleInputChange = (field: keyof AnalysisFormData, value: string | number) => {
+  const handleInputChange = (field: keyof AnalysisFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
@@ -72,127 +65,106 @@ export function HeroInput({ onAnalyze, isLoading = false }: HeroInputProps) {
   };
 
   return (
-    <Card className="p-8 bg-gradient-surface shadow-medium border-0">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-3 bg-gradient-primary bg-clip-text text-transparent">
-            Phân tích Off-page SEO
-          </h2>
-          <p className="text-muted-foreground text-lg">
-            Nhập URL bài viết và từ khóa để bắt đầu phân tích so sánh với đối thủ
-          </p>
+    <div className="max-w-5xl mx-auto">
+      {/* Header Section */}
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 mb-6 shadow-lg">
+          <LinkIcon className="h-8 w-8 text-white" />
         </div>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+          Phân tích Off-page SEO
+        </h1>
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Nhập URL bài viết và từ khóa để bắt đầu phân tích SEO Off-page và so sánh với đối thủ
+        </p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Required Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="url" className="text-base font-medium">
-                URL bài viết <span className="text-destructive">*</span>
-              </Label>
+      {/* Main Input Section */}
+      <Card className="p-8 md:p-12 bg-white dark:bg-surface shadow-xl border border-purple-100 dark:border-purple-900/30">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* URL Input */}
+          <div className="space-y-3">
+            <Label htmlFor="url" className="text-base font-semibold text-foreground flex items-center gap-2">
+              <LinkIcon className="h-4 w-4 text-purple-600" />
+              URL bài viết
+              <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
               <Input
                 id="url"
                 placeholder="https://example.com/bai-viet"
                 value={formData.url}
                 onChange={(e) => handleInputChange('url', e.target.value)}
-                className={`h-12 ${errors.url ? 'border-destructive' : ''}`}
+                className={`h-14 text-base pl-12 border-2 transition-all ${
+                  errors.url 
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                    : 'border-purple-200 dark:border-purple-800 focus:border-purple-500 focus:ring-purple-500'
+                }`}
+                disabled={isLoading}
               />
-              {errors.url && (
-                <div className="flex items-center gap-1 text-destructive text-sm">
-                  <AlertCircle className="h-4 w-4" />
-                  {errors.url}
-                </div>
-              )}
+              <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-400" />
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="keyword" className="text-base font-medium">
-                Từ khóa <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                id="keyword"
-                placeholder="từ khóa cần phân tích"
-                value={formData.keyword}
-                onChange={(e) => handleInputChange('keyword', e.target.value)}
-                className={`h-12 ${errors.keyword ? 'border-destructive' : ''}`}
-              />
-              {errors.keyword && (
-                <div className="flex items-center gap-1 text-destructive text-sm">
-                  <AlertCircle className="h-4 w-4" />
-                  {errors.keyword}
-                </div>
-              )}
-            </div>
+            {errors.url && (
+              <div className="flex items-center gap-2 text-red-600 text-sm">
+                <AlertCircle className="h-4 w-4" />
+                {errors.url}
+              </div>
+            )}
           </div>
 
-          {/* Optional Settings */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Vùng/Ngôn ngữ</Label>
-              <Select value={formData.location} onValueChange={(value) => handleInputChange('location', value)}>
-                <SelectTrigger className="h-10">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="VN/vi">VN/vi</SelectItem>
-                  <SelectItem value="US/en">US/en</SelectItem>
-                  <SelectItem value="UK/en">UK/en</SelectItem>
-                </SelectContent>
-              </Select>
+          {/* Keyword Input */}
+          <div className="space-y-3">
+            <Label htmlFor="keyword" className="text-base font-semibold text-foreground flex items-center gap-2">
+              <Search className="h-4 w-4 text-purple-600" />
+              Từ khóa tìm kiếm
+              <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Input
+                id="keyword"
+                placeholder="Nhập từ khóa bạn muốn phân tích"
+                value={formData.keyword}
+                onChange={(e) => handleInputChange('keyword', e.target.value)}
+                className={`h-14 text-base pl-12 border-2 transition-all ${
+                  errors.keyword 
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500' 
+                    : 'border-purple-200 dark:border-purple-800 focus:border-purple-500 focus:ring-purple-500'
+                }`}
+                disabled={isLoading}
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-purple-400" />
             </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Top N</Label>
-              <Select value={formData.topN.toString()} onValueChange={(value) => handleInputChange('topN', parseInt(value))}>
-                <SelectTrigger className="h-10">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="5">Top 5</SelectItem>
-                  <SelectItem value="10">Top 10</SelectItem>
-                  <SelectItem value="20">Top 20</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Giới hạn BL</Label>
-              <Select value={formData.blLimit.toString()} onValueChange={(value) => handleInputChange('blLimit', parseInt(value))}>
-                <SelectTrigger className="h-10">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1000">1.000</SelectItem>
-                  <SelectItem value="5000">5.000</SelectItem>
-                  <SelectItem value="10000">10.000</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            {errors.keyword && (
+              <div className="flex items-center gap-2 text-red-600 text-sm">
+                <AlertCircle className="h-4 w-4" />
+                {errors.keyword}
+              </div>
+            )}
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-center pt-4">
+          <div className="pt-4">
             <Button 
               type="submit" 
               size="lg" 
               disabled={isLoading}
-              className="bg-gradient-primary hover:opacity-90 text-primary-foreground px-8 py-3 text-lg font-semibold shadow-medium"
+              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-lg hover:shadow-xl transition-all duration-200"
             >
               {isLoading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2" />
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                   Đang phân tích...
                 </>
               ) : (
                 <>
-                  <Zap className="w-5 h-5 mr-2" />
+                  <Search className="w-5 h-5 mr-2" />
                   Phân tích ngay
                 </>
               )}
             </Button>
           </div>
         </form>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
 }

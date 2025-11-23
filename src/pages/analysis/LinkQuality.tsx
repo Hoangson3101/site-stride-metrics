@@ -1,169 +1,118 @@
-import { FilterBar } from "@/components/FilterBar";
+import { AnalysisHeader } from "@/components/AnalysisHeader";
 import { KPICards } from "@/components/KPICards";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Shield, TrendingUp, FileText, Target } from "lucide-react";
+import { Shield, TrendingUp, FileText, Target, FileX } from "lucide-react";
+import { QualityOverview } from "./components/QualityOverview";
+import { LinkTypeClassification } from "./components/LinkTypeClassification";
+import { TrafficAnalysis } from "./components/TrafficAnalysis";
+import { LinkPlacement } from "./components/LinkPlacement";
+import { DomainAnalysis } from "./components/DomainAnalysis";
+import { QualityWarnings } from "./components/QualityWarnings";
+import { useAnalysis } from "@/contexts/AnalysisContext";
 
 export default function LinkQuality() {
+  const { hasAnalysis } = useAnalysis();
   const kpiData = [
-    { label: "RD với DR > 30", value: 18, unit: "%", icon: Shield, change: -22, changeLabel: "vs Median Top 3" },
-    { label: "RD có Traffic > 1K", value: 42, unit: "%", icon: TrendingUp, change: 5, changeLabel: "vs Median Top 3" },
-    { label: "Contextual", value: 68, unit: "%", icon: FileText, change: 12, changeLabel: "vs Profile/Comment" },
-    { label: "Site chết/Unindex", value: 8, unit: "%", icon: Target, change: 8, changeLabel: "Cần kiểm tra" },
+    {
+      label: "RD với DR > 30",
+      value: 18,
+      unit: "%",
+      icon: Shield,
+      change: -22,
+      changeLabel: "so với Trung vị Top 10",
+    },
+    {
+      label: "RD có Traffic > 1K",
+      value: 42,
+      unit: "%",
+      icon: TrendingUp,
+      change: 5,
+      changeLabel: "so với Trung vị Top 10",
+    },
+    {
+      label: "Contextual Backlinks",
+      value: 68,
+      unit: "%",
+      icon: FileText,
+      change: 12,
+      changeLabel: "so với Profile/Comment",
+    },
+    {
+      label: "Site chết/Unindex",
+      value: 8,
+      unit: "%",
+      icon: Target,
+      change: 8,
+      changeLabel: "Cần kiểm tra",
+    },
+    {
+      label: "Orphan Page Backlinks",
+      value: 15,
+      unit: "%",
+      icon: FileX,
+      change: 7,
+      changeLabel: "so với Trung vị Top 10",
+    },
   ];
 
-  const drDistribution = [
-    { range: "0-10", count: 45 },
-    { range: "10-30", count: 72 },
-    { range: "30-50", count: 22 },
-    { range: "50+", count: 6 },
-  ];
-
-  const typeDistribution = [
-    { name: "Contextual", value: 98, color: "hsl(var(--success))" },
-    { name: "Profile/Comment", value: 47, color: "hsl(var(--warning))" },
-  ];
-
-  const highQualityDomains = [
-    { domain: "techcrunch.com", dr: 92, traffic: "45M", type: "Báo/Media", backlinks: 3, quality: "High" },
-    { domain: "forbes.com", dr: 94, traffic: "150M", type: "Báo/Media", backlinks: 2, quality: "High" },
-    { domain: "medium.com", dr: 96, traffic: "180M", type: "Blog Platform", backlinks: 12, quality: "High" },
-  ];
-
-  const lowQualityDomains = [
-    { domain: "spammy-site1.xyz", dr: 5, traffic: "0", type: "Profile", backlinks: 8, quality: "Low" },
-    { domain: "dead-forum2.net", dr: 12, traffic: "50", type: "Forum", backlinks: 15, quality: "Low" },
-    { domain: "link-farm3.info", dr: 8, traffic: "0", type: "Directory", backlinks: 22, quality: "Low" },
-  ];
+  if (!hasAnalysis) {
+    return (
+      <div className="min-h-screen bg-gradient-soft p-6 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Chưa có dữ liệu phân tích</h2>
+          <p className="text-muted-foreground mb-4">Vui lòng quay lại trang chủ để nhập thông tin phân tích.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-soft p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Chất lượng Backlink</h1>
-        <p className="text-muted-foreground">Đánh giá sức mạnh backlink dựa trên DR, traffic, loại nguồn</p>
-      </div>
+      {/* Header with New Analysis Button */}
+      <AnalysisHeader
+        title="Chất lượng Backlink"
+        description="Đánh giá sức mạnh backlink dựa trên DR, traffic, loại nguồn và vị trí đặt link"
+      />
 
-      <FilterBar onExport={() => console.log("Export")} />
+      {/* Tabs - Moved to top */}
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full max-w-4xl grid-cols-6">
+          <TabsTrigger value="overview">Tổng quan</TabsTrigger>
+          <TabsTrigger value="types">Loại Backlink</TabsTrigger>
+          <TabsTrigger value="traffic">Traffic</TabsTrigger>
+          <TabsTrigger value="placement">Vị trí</TabsTrigger>
+          <TabsTrigger value="domains">Domain</TabsTrigger>
+          <TabsTrigger value="warnings">Cảnh báo</TabsTrigger>
+        </TabsList>
 
-      <KPICards data={kpiData} />
+        <TabsContent value="overview" className="mt-6">
+          {/* KPI Cards - Chỉ hiển thị ở tab Tổng quan */}
+          <div className="mb-6">
+            <KPICards data={kpiData} />
+          </div>
+          <QualityOverview />
+        </TabsContent>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6 bg-surface shadow-medium">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Phân bố theo DR</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={drDistribution}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="range" stroke="hsl(var(--muted-foreground))" />
-              <YAxis stroke="hsl(var(--muted-foreground))" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: "hsl(var(--popover))", 
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: "8px"
-                }} 
-              />
-              <Bar dataKey="count" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Card>
+        <TabsContent value="types" className="mt-6">
+          <LinkTypeClassification />
+        </TabsContent>
 
-        <Card className="p-6 bg-surface shadow-medium">
-          <h3 className="text-lg font-semibold text-foreground mb-4">Contextual vs Profile/Comment</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={typeDistribution}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, value }) => `${name}: ${value}`}
-                outerRadius={100}
-                dataKey="value"
-              >
-                {typeDistribution.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Card>
-      </div>
+        <TabsContent value="traffic" className="mt-6">
+          <TrafficAnalysis />
+        </TabsContent>
 
-      <Card className="p-6 bg-surface shadow-medium">
-        <Tabs defaultValue="high">
-          <TabsList>
-            <TabsTrigger value="high">High-Authority Domains</TabsTrigger>
-            <TabsTrigger value="low">Low-Quality Domains</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="high" className="mt-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Domain</TableHead>
-                  <TableHead>DR</TableHead>
-                  <TableHead>Traffic</TableHead>
-                  <TableHead>Loại</TableHead>
-                  <TableHead>BLs</TableHead>
-                  <TableHead>Đánh giá</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {highQualityDomains.map((domain, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell className="font-medium">{domain.domain}</TableCell>
-                    <TableCell><Badge className="bg-success">{domain.dr}</Badge></TableCell>
-                    <TableCell>{domain.traffic}</TableCell>
-                    <TableCell>{domain.type}</TableCell>
-                    <TableCell>{domain.backlinks}</TableCell>
-                    <TableCell><Badge variant="default">{domain.quality}</Badge></TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TabsContent>
+        <TabsContent value="placement" className="mt-6">
+          <LinkPlacement />
+        </TabsContent>
 
-          <TabsContent value="low" className="mt-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Domain</TableHead>
-                  <TableHead>DR</TableHead>
-                  <TableHead>Traffic</TableHead>
-                  <TableHead>Loại</TableHead>
-                  <TableHead>BLs</TableHead>
-                  <TableHead>Đánh giá</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {lowQualityDomains.map((domain, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell className="font-medium">{domain.domain}</TableCell>
-                    <TableCell><Badge variant="destructive">{domain.dr}</Badge></TableCell>
-                    <TableCell>{domain.traffic}</TableCell>
-                    <TableCell>{domain.type}</TableCell>
-                    <TableCell>{domain.backlinks}</TableCell>
-                    <TableCell><Badge variant="outline">{domain.quality}</Badge></TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TabsContent>
-        </Tabs>
-      </Card>
+        <TabsContent value="domains" className="mt-6">
+          <DomainAnalysis />
+        </TabsContent>
 
-      <Card className="p-6 bg-gradient-primary border-0 text-primary-foreground shadow-strong">
-        <h3 className="text-lg font-semibold mb-2">Nhận xét & Gợi ý</h3>
-        <p className="text-sm opacity-90">
-          Chỉ 18% RD hiện tại có DR &gt; 30, thấp hơn đáng kể so với trung bình ngành (40-50%). 
-          Gợi ý: Tăng tỷ lệ link từ báo chí và authority sites, giảm phụ thuộc vào forum profiles. 
-          Ưu tiên outreach đến các domain có DR 30-70 và traffic thực tế &gt; 5K/tháng.
-        </p>
-      </Card>
+        <TabsContent value="warnings" className="mt-6">
+          <QualityWarnings />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
